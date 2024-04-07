@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnalitixSolver</title>
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+    <header class="nav-bg">
+        <div class="header-main">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'img/logo-main.webp' %}" alt="logo">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'methods' %}">Methods</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="header">
+                <h1>AnalitixSolver</h1>
+                <p>AnalitixSolver is a website where you'll find several methods used to solve numerical analysis problems.</p>
+                <div>
+                    <button>Learn more about this website</button>
+                    <button>Explore methods</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="left-panel">
+                    <div class="parameters">
+                        <label for="function">Function f</label>
+                        <input type="text" id="function" value="x^2">
+                        <div>
+                            <input type="checkbox" id="grid">
+                            <label for="grid">Grid on</label>
+                        </div>
+                        <button>Define domain</button>
+                        <button>Plot the function</button>
+                    </div>
+                </div>
+                <div class="right-panel">
+                    <div class="graph">
+                        <!-- espacio para el grafico -->
+                        Graph placeholder
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+
+    </footer>
+    
+</body>
+</html>

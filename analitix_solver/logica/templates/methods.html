@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Methods - AnalitixSolver</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+
+<header class="nav-bg">
+    <div class="header-main">
+        <a href="{% url 'home' %}">
+            <img src="{% static 'img/logo-main.webp' %}" alt="logo">
+        </a>
+        <nav>
+            <ul>
+                <li><a href="{% url 'methods' %}">Methods</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#help">Help</a></li>   
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="methods-container">
+        <h1>Methods</h1>
+        <p>6 methods to solve numerical problems</p>
+        <div class="methods-list">
+            <a href="{% url 'bisection_method' %}" class="method">Bisection</a>
+            <a href="{% url 'false_position_method' %}" class="method">False Position</a>
+            <a href="{% url 'fixed_point_method' %}" class="method">Fixed Point</a>
+            <a href="{% url 'newton_method' %}" class="method">Newton</a>
+            <a href="{% url 'secant_method' %}" class="method">Secant</a>
+            <a href="{% url 'multiple_roots_method' %}" class="method">multiple Roots</a>
+            <!-- Agrega más botones según necesites -->
+        </div>
+    </section>
+</main>
+
+<footer>
+    <!-- Tu pie de página aquí -->
+</footer>
+
+</body>
+</html>

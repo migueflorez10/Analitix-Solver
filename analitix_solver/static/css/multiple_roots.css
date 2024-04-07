@@ -1,0 +1,140 @@
+/* Estilos generales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header, footer {
+    background-color: #003366; /* Color azul oscuro basado en tu estilo existente */
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* Contenedor principal */
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+/* Sección de entrada de datos */
+.method-playground {
+    flex-basis: 30%;
+    margin: 10px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.method-playground h1 {
+    background-color: #003366;
+    color: white;
+    padding: 10px;
+    margin-top: -20px;
+    margin-bottom: 20px;
+    margin-left: -20px;
+    width: 110%;
+    border-radius: 8px 8px 0 0;
+    text-align: center;
+}
+
+.parameters label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.parameters input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.parameters button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.parameters button:hover {
+    background-color: #218838;
+}
+
+/* Sección de solución gráfica */
+.results-section {
+    flex-basis: 65%;
+    margin: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    padding:20px;
+}
+
+.results-section #graph-container {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-top: 20px;
+    background: #e9ecef;
+}
+
+.help-section {
+    width: 100%;
+    background-color: #003366;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+/* Tabla de resultados */
+#table-container {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #0a3057;/* Un color azul que combina con el encabezado */
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Pie de página */
+footer {
+    margin-top: 40px;
+    padding: 20px 0;
+    font-size: 0.8rem;
+}

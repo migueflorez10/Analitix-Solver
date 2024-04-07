@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>False Position Method - AnalitixSolver</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/false_rule.css' %}">
+
+
+</head>
+<body>
+    <header class="nav-bg">
+        <div class="header-main">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'img/logo-main.webp' %}" alt="logo">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'methods' %}">Methods</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Method playground section -->
+        <section class="method-playground">
+            
+            <h1>False Position</h1>
+            <!-- Form for input parameters -->
+            <form id="falseRuleForm" method="post">
+                {% csrf_token%}
+                <div class="parameters">
+                    <label for="function">Function</label>
+                    <input type="text" id="function" name="function" value="log(sin(x)^2 + 1)-(1/2)" required>
+                    <label for="a_value">Lower interval value (a)</label>
+                    <input type="text" id="a_value" name="a_value" value="0" required>
+                    <label for="b_value">Higher interval value (b)</label>
+                    <input type="text" id="b_value" name="b_value" value="1" required>
+                    <label for="tolerance">Tolerance</label>
+                    <input type="text" id="tolerance" name="tolerance" value="1e-7" step="any" required>
+                    <label for="max_iterations">Max iterations (max 100)</label>
+                    <input type="text" id="max_iterations" name="max_iterations"  value="100" max="100" required>
+                    <button type="submit">Run</button>
+                </div>
+            </form>
+        </section>
+
+    
+        <!-- Graph and results table section -->
+        <section class="results-section">
+            {% if data %}
+            <div id="graph-container">
+                <img src="{% static 'img/graph.png' %}">
+            </div>
+            {% endif %}
+            <br>
+            <h4>The approximation of the root found is: {{data.root}}</h4>
+            <div id="table-container">
+                
+                <table class="table">
+                    <thead class="thead-title">
+                        <tr>
+                            {%for i in data.columns %}
+                            <th scope="col">
+                                <h3>{{i}}</h3>
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for datos in data.results %}
+                        <tr>
+                            {%for valor in datos %}
+                            <td>{{valor}}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+            </div>
+            </div>
+        </section>
+       
+       
+
+        <!-- Help section -->
+        <section class="help-section">
+            <h2>Help</h2>
+            <p>The function must be continuous and differentiable, ...</p>
+            <!-- Additional help information here -->
+        </section>
+    </main>
+
+    <!-- Your existing footer here -->
+
+</body>
+</html>

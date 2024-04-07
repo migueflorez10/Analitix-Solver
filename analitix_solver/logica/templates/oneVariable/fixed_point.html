@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Point Method - AnalitixSolver</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fixed_point.css' %}">
+
+</head>
+<body>
+    <header class="nav-bg">
+        <div class="header-main">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'img/logo-main.webp' %}" alt="logo">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'methods' %}">Methods</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Method playground section -->
+        <section class="method-playground">
+            <h1>Fixed Pont</h1>
+            <!-- Form for input parameters -->
+            <form id="fixedPoint" method="post">
+                {% csrf_token %}
+                <div class="parameters">
+                    <label for="function">Function f (blue line)</label>
+                    <input type="text" id="function_x" name="function_x" value="log(sin(x)^2 + 1)-(1/2)-x" required>
+                    <label for="a_value">Fuction g (orange line)</label>
+                    <input type="text" id="function_g" name="function_g" value="log(sin(x)^2 + 1)-(1/2)" required>
+                    <label for="b_value">Initial Value (x0)</label>
+                    <input type="text" id="initial_value" name="initial_value" value="-0.5" required>
+                    <label for="tolerance">Tolerance</label>
+                    <input type="text" id="tolerance" name="tolerance" step="any" value="1e-7" required>
+                    <label for="max_iterations">Max iterations (max 100)</label>
+                    <input type="text" id="max_iterations" name="max_iterations" max="100" value="100" required>
+                    <button type="submit">Run</button>
+                </div>
+            </form>
+        </section>
+
+        
+            
+    
+        <!-- Graph and results table section -->
+        <section class="results-section">
+            {% if data %}
+            <div id="graph-container">
+                <img src="{% static 'img/graph.png' %}">
+            </div>
+            {% endif %}
+            <br>
+            <h4>The approximation of the root found is: {{data.root}}</h4>
+            <div id="table-container">
+                
+                <table class="table">
+                    <thead class="thead-title">
+                        <tr>
+                            {%for i in data.columns %}
+                            <th scope="col">
+                                <h3>{{i}}</h3>
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for datos in data.results %}
+                        <tr>
+                            {%for valor in datos %}
+                            <td>{{valor}}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+            </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Your existing footer here -->
+
+</body>
+</html>
