@@ -26,41 +26,40 @@
     </header>
 
     <main>
-        <div class="container">
-            <div class="header">
-                <h1>AnalitixSolver</h1>
-                <p>AnalitixSolver is a website where you'll find several methods used to solve numerical analysis problems.</p>
-                <div>
-                    <button>Learn more about this website</button>
-                    <button>Explore methods</button>
-                </div>
+        <section class="welcome">
+            <h1>Welcome to AnalitixSolver!</h1>
+            <p>Explore a wide range of numerical methods to solve mathematical problems efficiently. Whether you're dealing with roots of equations or optimization tasks, our tool offers an interactive platform to compute answers swiftly and accurately.</p>
+            <p>Navigate through our different methods using the 'Methods' tab and start solving right away!</p>
+        </section>
+        <section class="team">
+            <h2>Meet Our Team</h2>
+            <div class="team-members">
+                <article class="team-member">
+                    <img src="{% static 'img/miguel.jpeg' %}" alt="Member Name">
+                    <h3>Miguel Martinez </h3>
+                    <p>FrontEnd Developer</p>
+                </article>
+                <article class="team-member">
+                    <img src="{% static 'img/migue.jpeg' %}" alt="Member Name">
+                    <h3>Carla Rendon </h3>
+                    <p>BackEnd Developer</p>
+                </article>
+                <article class="team-member">
+                    <img src="{% static 'img/member3.jpg' %}" alt="Member Name">
+                    <h3>Paulina Lopez</h3>
+                    <p>FrontEnd Developer</p>
+                </article>
+                <article class="team-member">
+                    <img src="{% static 'img/member4.jpg' %}" alt="Member Name">
+                    <h3>Victor Botero</h3>
+                    <p>BackEnd Developer</p>
+                </article>
             </div>
-            <div class="main-content">
-                <div class="left-panel">
-                    <div class="parameters">
-                        <label for="function">Function f</label>
-                        <input type="text" id="function" value="x^2">
-                        <div>
-                            <input type="checkbox" id="grid">
-                            <label for="grid">Grid on</label>
-                        </div>
-                        <button>Define domain</button>
-                        <button>Plot the function</button>
-                    </div>
-                </div>
-                <div class="right-panel">
-                    <div class="graph">
-                        <!-- espacio para el grafico -->
-                        Graph placeholder
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        </section>
     </main>
 
     <footer>
-
+        <p>&copy; 2024 AnalitixSolver. All rights reserved.</p>
     </footer>
     
 </body>
