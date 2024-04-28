@@ -6,6 +6,9 @@ import numpy as np
 def Home(request):
     return render(request, "home.html")
 
+def about_view(request):
+    return render(request, 'about.html')
+
 def Methods(request):
     return render(request, "methods.html")
 

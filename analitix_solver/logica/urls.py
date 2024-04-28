@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('', views.Home, name="home"),
     path('methods/', views.Methods, name="methods"),
+    path('about/', views.about_view, name='about'),
     path('bisection_method/', views.bisection_method, name="bisection_method"),
     path('false_position/', views.false_position_method, name="false_position_method"),
     path('fixed_point/', views.fixed_point_method, name="fixed_point_method"),

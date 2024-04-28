@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - AnalitixSolver</title>
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+</head>
+<body>
+    <div class="wrapper"> 
+        <header class="nav-bg">
+            <div class="header-main">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'img/logo-main.webp' %}" alt="logo">
+                </a>
+                <nav>
+                    <ul>
+                        <li><a href="{% url 'methods' %}">Methods</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="#">Help</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <section class="about-section">
+                <div class="about-container">
+                    <h1>About AnalitixSolver</h1>
+                    <p>This platform is built using Django and Python, showcasing various numerical analysis methods in an interactive way. The goal is to facilitate understanding and application of these methods.</p>
+                    <h2>Open Source Libraries:</h2>
+                    <ul>
+                        <!-- ... -->
+                    </ul>
+                    <p>To contribute or view the source code, visit our <a href="https://github.com/migueflorez10/Analitix-Solver" target="_blank">GitHub page</a>.</p>
+                    <p><em>AnalitixSolver is crafted with care and is open source, released under the MIT License.</em></p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 AnalitixSolver. All rights reserved.</p>
+        </footer>
+    </div> 
+</body>
+</html>
