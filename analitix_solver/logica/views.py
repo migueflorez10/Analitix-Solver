@@ -9,6 +9,9 @@ def Home(request):
 def about_view(request):
     return render(request, 'about.html')
 
+def help(request):
+    return render(request, 'help.html')
+
 def Methods(request):
     return render(request, "methods.html")
 

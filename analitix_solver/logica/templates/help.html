@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - AnalitixSolver</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/help.css' %}">
+</head>
+<body>
+    <div class="wrapper">
+        <header class="nav-bg">
+            <div class="header-main">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'img/logo-main.webp' %}" alt="AnalitixSolver Logo">
+                </a>
+                <nav>
+                    <ul>
+                        <li><a href="{% url 'methods' %}">Methods</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="{% url 'help' %}">Help</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <section class="help-container">
+                <h1>Help Center</h1>
+                <div class="faq-section">
+                    <h2>FAQ</h2>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ('faq1')">
+                            The function I provided cannot be parsed
+                            <span class="arrow">&#9662;</span>
+                        </button>
+                        <div class="faq-answer" id="faq1" style="display: none;">
+                            <p>The string provided by the user is parsed and evaluated using mathjs. You must make sure that the expression you provided respects the syntax of the expression parser from math.js.</p>
+                        </div>
+                    </div>
+                    <!-- Repite la estructura de .faq-item para cada pregunta que tengas -->
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ('faq1')">
+                            I found a bug / an issue on the website
+                            <span class="arrow">&#9662;</span>
+                        </button>
+                        <div class="faq-answer" id="faq1" style="display: none;">
+                            <p>If you have identified an error or a bug that is worth reporting, please create an issue on the GitHub project</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ('faq1')">
+                            I have trouble using the website on mobile
+                            <span class="arrow">&#9662;</span>
+                        </button>
+                        <div class="faq-answer" id="faq1" style="display: none;">
+                            <p>We're actively trying to make the website more mobile friendly, but we still struggle with some UI elements (especially LaTeX rendered elements).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 AnalitixSolver. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleFAQ(faqId) {
+            var answer = document.getElementById(faqId);
+            var arrow = answer.previousElementSibling.querySelector('.arrow');
+
+            if (answer.style.display === "block") {
+                answer.style.display = "none";
+                arrow.innerHTML = "&#9662;";
+            } else {
+                answer.style.display = "block";
+                arrow.innerHTML = "&#9652;";
+            }
+        }
+    </script>
+</body>
+</html>

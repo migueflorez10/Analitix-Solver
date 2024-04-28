@@ -1,0 +1,99 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.nav-bg {
+    background-color: #083c5a;
+}
+
+.header-main {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    align-items: center;
+    color: white;
+}
+
+.header-main img {
+    height: 50px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.main {
+    flex-grow: 1;
+    padding: 2rem;
+}
+
+.help-container {
+    max-width: 800px;
+    margin: auto;
+}
+
+.faq-section h2 {
+    margin-bottom: 1rem;
+}
+
+.faq-item {
+    background: #f9f9f9;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ddd;
+}
+
+.faq-question {
+    padding: 1rem 2rem; /* Aumenta el padding horizontal */
+    min-width: 250px; /* Establece un ancho mínimo para los botones */
+    box-sizing: border-box; 
+    border: none;
+    background-color: #f9f9f9; /* O el color de fondo que prefieras */
+    cursor: pointer;
+    text-align: left;
+    display: inline-block; /* O 'block' si quieres que ocupe toda la línea */
+    width: auto; /* O '100%' para ancho completo */
+    margin-bottom: 0.5rem; 
+    border-radius: 4px;
+    outline: none; /* Remueve el outline al hacer clic */
+    transition: background-color 0.3s; /* Para un efecto suave al cambiar de estado */
+}
+
+.faq-question:hover {
+    background-color: #e9e9e9; /* Cambia el color de fondo al pasar el mouse */
+}
+
+.arrow {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.faq-answer {
+    padding: 0 1rem 1rem;
+    display: none;
+}
+
+footer {
+    background-color: #083c5a;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: auto;
+}
