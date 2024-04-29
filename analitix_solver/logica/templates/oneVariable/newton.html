@@ -36,6 +36,7 @@
                 <div class="parameters">
                     <label for="function">Function f (blue line)</label>
                     <input type="text" id="function_f" name="function_f" value="log(sin(x)^2 + 1)-(1/2)" required>
+                    <center><label for="a_value" style="font-weight:bold; font-size:14px">If you want to search the derivate <br> <a href="https://es.symbolab.com/"  target="_blank">👉click here👈</a> </label></center>
                     <label for="a_value">Fuction f' (first derivate of f) (orange line)</label>
                     <input type="text" id="function_g" name="function_g" value="2*(1/(sin(x)^2 + 1))*(sin(x)*cos(x))" required>
                     <label for="b_value">Initial Value (x0)</label>
@@ -56,7 +57,7 @@
         <section class="results-section">
             {% if data %}
                 <div id="graph-container">
-                    <img src="{% static 'img/graph.png' %}">
+                    <img  style="width:90%;" src="{% static 'img/graph.png' %}">
                 </div>
             {% endif %}
             <br>

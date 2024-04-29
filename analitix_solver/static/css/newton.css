@@ -28,7 +28,8 @@ main {
 .method-playground {
     flex-basis: 30%;
     margin: 10px;
-    padding: 20px;
+    
+    /* padding: 20px; */
     background: white;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -38,10 +39,11 @@ main {
     background-color: #003366;
     color: white;
     padding: 10px;
-    margin-top: -20px;
+    margin-bottom: 10px;
+    /* margin-top: -20px;
     margin-bottom: 20px;
-    margin-left: -20px;
-    width: 110%;
+    margin-left: -20px; */
+    width: auto;
     border-radius: 8px 8px 0 0;
     text-align: center;
 }
@@ -49,25 +51,31 @@ main {
 .parameters label {
     display: block;
     margin-bottom: 0.5rem;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .parameters input {
-    width: 100%;
+    width: 88%;
     padding: 10px;
     margin-bottom: 1rem;
     border: 1px solid #ccc;
     border-radius: 4px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .parameters button {
+    margin-left: 20px;
+    margin-right: 20px;
     display: block;
-    width: 100%;
+    width: 88%;
     padding: 10px;
     background-color: #28a745;
     color: white;
     border: none;
     border-radius: 4px;
-    margin-top: 10px;
+    margin-bottom: 20px;
     cursor: pointer;
 }
 
@@ -77,20 +85,23 @@ main {
 
 /* Sección de solución gráfica */
 .results-section {
-    flex-basis: 65%;
+    flex-basis: 60%;
     margin: 10px;
     background: white;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     text-align: center;
-    padding:20px;
+    padding:10px;
 }
 
+.img{
+    width: 80%;
+    height: auto;
+}
 .results-section #graph-container {
     border: 1px solid #ccc;
     padding: 15px;
-    margin-top: 20px;
-    background: #e9ecef;
+    
 }
 
 .help-section {
@@ -138,4 +149,3 @@ footer {
     padding: 20px 0;
     font-size: 0.8rem;
 }
-
