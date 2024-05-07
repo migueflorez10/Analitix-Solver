@@ -1,0 +1,139 @@
+/* Estilos generales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header, footer {
+    background-color: #003366; /* Color azul oscuro */
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* Contenedor principal */
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+/* Sección de entrada de datos */
+.method-playground {
+    flex-basis: 45%;
+    margin: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.method-playground h1 {
+    background-color: #003366;
+    color: white;
+    padding: 10px;
+    margin: 0;
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+    text-align: center;
+}
+
+.parameters label {
+    display: block;
+    margin: 0.5rem 20px;
+}
+
+.parameters input, .parameters select {
+    width: calc(100% - 40px);
+    padding: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: block;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.parameters button {
+    display: block;
+    width: calc(100% - 40px);
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 20px 20px 20px;
+}
+
+.parameters button:hover {
+    background-color: #218838;
+}
+
+/* Sección de resultados */
+.results-section {
+    flex-basis: 50%;
+    margin: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 10px;
+    text-align: center;
+}
+
+.results-section img {
+    width: 100%; /* Asegúrate de que las imágenes sean responsivas */
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Tabla de resultados */
+#table-container {
+    width: 100%;
+    overflow-x: auto; /* Para tablas grandes */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #0a3057;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Sección de ayuda */
+.help-section {
+    width: 100%;
+    background-color: #003366;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+/* Pie de página */
+footer {
+    margin-top: 40px;
+    padding: 20px 0;
+    font-size: 0.8rem;
+}

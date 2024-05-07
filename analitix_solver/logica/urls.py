@@ -13,4 +13,6 @@ urlpatterns = [
     path('newton/', views.newton_method, name="newton_method"),
     path('secant/', views.secant_method, name="secant_method"),
     path('multiple_roots/', views.multiple_roots_method, name="multiple_roots_method"),
+    path('sor/', views.sor_method, name="sor_method"),
+
 ]

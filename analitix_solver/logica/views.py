@@ -282,3 +282,30 @@ def bisection_method(request):
 
     return render(request, './oneVariable/bisection.html')
 
+'''
+
+'''
+def sor_method(request):
+    context = {}
+    if request.method == 'POST':
+        size = int(request.POST['matrix-size'])
+        A = np.zeros((size, size), dtype=float)
+        b = np.zeros(size, dtype=float)
+        for i in range(size):
+            for j in range(size):
+                A[i, j] = float(request.POST[f'matrixA{i}{j}'])
+            b[i] = float(request.POST[f'vectorB{i}'])
+        initial_guess = [float(x) for x in request.POST.get('initial_guess', '[0]*size').strip('[]').split(',')]
+        omega = float(request.POST['omega'])
+        tolerance = float(request.POST['tolerance'])
+        max_iterations = int(request.POST['max_iterations'])
+        solution, iterations, iter_details, spectral_radius = sor_solver(A, b, omega, initial_guess, tolerance, max_iterations)
+        context.update({
+            'solution': solution.tolist() if solution is not None else 'No solution found',
+            'iterations': iterations,
+            'iter_details': iter_details,
+            'max_iterations': max_iterations,
+            'columns': ['iter', 'x values', 'E'],
+            'spectral_radius': spectral_radius
+        })
+    return render(request, 'oneVariable/sor.html', context)

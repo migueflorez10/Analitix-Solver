@@ -2,6 +2,8 @@ import sympy as sympy
 from sympy import Symbol, sympify, Abs, diff
 from sympy.abc import x
 from sympy import symbols, sympify, N
+import numpy as np
+
 
 '''
 This code implements the bisection method to find a root of a function f(x) on a given interval [a,b]. 
@@ -393,3 +395,30 @@ def multiple_roots(funct, first_derivative, second_derivative, x0, tol, max_coun
 
     return output
     
+'''
+
+'''
+def sor_solver(A, b, omega, initial_guess, tolerance, max_iterations):
+    x = np.array(initial_guess)
+    n = len(b)
+    iter_details = []
+    x_new = np.copy(x)
+    D = np.diag(np.diag(A))
+    L = np.tril(A, -1)
+    U = np.triu(A, 1)
+    T = np.linalg.inv(D + omega * L).dot((1 - omega) * D - omega * U)
+    spectral_radius = max(abs(np.linalg.eigvals(T)))
+    for iteration in range(max_iterations):
+        x_old = np.copy(x_new)
+        for i in range(n):
+            sum1 = np.dot(A[i, :i], x_new[:i])
+            sum2 = np.dot(A[i, i+1:], x_new[i+1:])
+            x_new[i] = (b[i] - sum1 - sum2) / A[i, i]
+            x_new[i] = (1 - omega) * x_old[i] + omega * x_new[i]
+        error = np.linalg.norm(x_new - x_old, ord=np.inf)
+        formatted_error = f"{error:^15.7E}"
+        iter_details.append({'iteration': iteration, 'x_values': np.round(x_new, 6).tolist(), 'error': formatted_error})
+        if error < tolerance:
+            break
+        x = x_new
+    return np.round(x, 4), iteration + 1, iter_details, np.round(spectral_radius, 6)
