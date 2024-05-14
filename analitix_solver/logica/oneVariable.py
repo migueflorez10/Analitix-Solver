@@ -279,6 +279,7 @@ def newton(x0, Tol, Niter, fx, df):
 
 '''
 def secant(fx, tol, Niter, x0, x1):
+    
     output = {
         "columns": ["iter", "xi", "f(xi)", "E"],
         "errors": list()
@@ -401,17 +402,22 @@ def multiple_roots(funct, first_derivative, second_derivative, x0, tol, max_coun
         output['conclusion'] = "Given the number of iterations and the tolerance, it was impossible to find a satisfying root."
     else:
         output['conclusion'] = "The method exploded."
-
-    convertTable.tableToText(output["columns"], output["results"], "multiple_roots")
+        
+    convertTable.tableToText(output["columns"], output["iterations"], "multiple_roots")
+    
     return output
     
 '''
 
 '''
 def sor_solver(A, b, omega, initial_guess, tolerance, max_iterations):
+    output = {}
+    headers = ["iteration", "x_values", "error"]
     x = np.array(initial_guess)
     n = len(b)
     iter_details = []
+    details = []
+    
     x_new = np.copy(x)
     D = np.diag(np.diag(A))
     L = np.tril(A, -1)
@@ -428,9 +434,16 @@ def sor_solver(A, b, omega, initial_guess, tolerance, max_iterations):
         error = np.linalg.norm(x_new - x_old, ord=np.inf)
         formatted_error = f"{error:^15.7E}"
         iter_details.append({'iteration': iteration, 'x_values': np.round(x_new, 6).tolist(), 'error': formatted_error})
+        
+        details.append([iteration, np.round(x_new, 6).tolist(), formatted_error])
+        
         if error < tolerance:
             break
         x = x_new
+        
+    output["results"] = details
+    convertTable.tableToText(headers , output["results"] , "sor_solver")
+    
     return np.round(x, 4), iteration + 1, iter_details, np.round(spectral_radius, 6)
 '''
 

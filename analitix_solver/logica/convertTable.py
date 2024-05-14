@@ -4,9 +4,12 @@ from datetime import datetime
 import shutil
 
 def tableToText(titles, data, nameMethod):
+    
     for i in range(1, len(titles)):
         titles[i] = f"          {titles[i]}"
-    dfData = pd.DataFrame(data, columns=titles)    
+        
+    dfData = pd.DataFrame(data, columns=titles)
+        
     nameFile = f'{nameMethod}_{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.txt'
     route = getDirectory() + f'\\analitix_solver_tables\\'
     createDirectory(route)
