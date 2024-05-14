@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vandermonde - AnalitixSolver</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vandermonde.css' %}">
+</head>
+
+<body>
+    <header class="nav-bg">
+        <div class="header-main">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'img/logo-main.webp' %}" alt="logo">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'methods' %}">Methods</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Method playground section -->
+        <section class="method-playground">
+            <h1>Vandermonde Method</h1>
+            <!-- Form for input parameters -->
+            <form id="vandermondeForm" method="post">
+                {% csrf_token %}
+                <div class="parameters">
+                    <label for="x_values">X values (comma-separated):</label>
+                    <input type="text" id="x_values" name="x_values" required>
+                    <label for="y_values">Y values (comma-separated):</label>
+                    <input type="text" id="y_values" name="y_values" required>
+                    <button type="submit">Run</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Results section -->
+        <section class="results-section">
+            {% if graph %}
+            <div id="graph-container">
+                <img style="width:90%;" src="{% static graph %}">
+            </div>
+            {% endif %}
+
+            <br>
+            {% if coefficients %}
+            <p>Polynomial coefficients: <b>{{ coefficients }}</b></p>
+            {% endif %}
+
+            {% if polynomial %}
+            <p>Vandermonde polynom:
+            <p>
+            <p><b>{{ polynomial }}</b></p>
+            {% endif %}
+
+            {% if matrix %}
+            <br>
+            <h2>Vandermonde matrix:</h2>
+            <table class="table">
+                <tbody>
+                    {% for row in matrix %}
+                    <tr>
+                        {% for cell in row %}
+                        <td>{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </section>
+
+        <!-- Help section -->
+        <section class="help-section">
+            <h2>Help</h2>
+            <p>Enter the x and y values as comma-separated numbers. Each x corresponds to a y, forming coordinate pairs
+                used for interpolation.</p>
+        </section>
+    </main>
+</body>
+
+</html>

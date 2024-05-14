@@ -2,6 +2,8 @@ from django.shortcuts import render
 from logica.oneVariable import *
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 
 def Home(request):
     return render(request, "home.html")
@@ -309,3 +311,82 @@ def sor_method(request):
             'spectral_radius': spectral_radius
         })
     return render(request, 'oneVariable/sor.html', context)
+'''
+
+'''
+def jacobi_method(request):
+    context = {}
+    if request.method == 'POST':
+        size = int(request.POST['matrix-size'])
+        A = np.zeros((size, size), dtype=float)
+        b = np.zeros(size, dtype=float)
+        for i in range(size):
+            for j in range(size):
+                A[i, j] = float(request.POST[f'matrixA{i}{j}'])
+            b[i] = float(request.POST[f'vectorB{i}'])
+        initial_guess = [float(x) for x in request.POST.get('initial_guess', '[0]' * size).strip('[]').split(',')]
+        tolerance = float(request.POST['tolerance'])
+        max_iterations = int(request.POST['max_iterations'])
+        solution, iterations, iter_details, spectral_radius = jacobi_solver(A, b, initial_guess, tolerance, max_iterations)
+        context.update({
+            'solution': solution.tolist() if solution is not None else 'No solution found',
+            'iterations': iterations,
+            'iter_details': iter_details,
+            'max_iterations': max_iterations,
+            'columns': ['iter', 'x values', 'E'],
+            'spectral_radius': spectral_radius
+        })
+    return render(request, 'oneVariable/jacobi.html', context)
+'''
+
+'''
+def gauss_method(request):
+    context = {}
+    if request.method == 'POST':
+        size = int(request.POST['matrix-size'])
+        A = np.zeros((size, size), dtype=float)
+        b = np.zeros(size, dtype=float)
+        for i in range(size):
+            for j in range(size):
+                A[i, j] = float(request.POST[f'matrixA{i}{j}'])
+            b[i] = float(request.POST[f'vectorB{i}'])
+        initial_guess = [float(x) for x in request.POST.get('initial_guess', '[0]' * size).strip('[]').split(',')]
+        tolerance = float(request.POST['tolerance'])
+        max_iterations = int(request.POST['max_iterations'])
+        solution, iterations, iter_details, spectral_radius = gauss_seidel_solver(A, b, initial_guess, tolerance, max_iterations)
+        context.update({
+            'solution': solution.tolist() if solution is not None else 'No solution found',
+            'iterations': iterations,
+            'iter_details': iter_details,
+            'max_iterations': max_iterations,
+            'columns': ['iter', 'x values', 'E'],
+            'spectral_radius': spectral_radius
+        })
+    return render(request, 'oneVariable/gauss_seidel.html', context)
+"""
+
+"""
+def vandermonde_method(request):
+    context = {}
+    if request.method == 'POST':
+        x_values = request.POST.get('x_values', '')
+        y_values = request.POST.get('y_values', '')
+        x = list(map(float, x_values.split(',')))
+        y = list(map(float, y_values.split(',')))
+        V, coeffs, polynomial, formatted_polynomial = vandermonde_interpolation(x, y)
+        context['matrix'] = V.tolist()
+        context['coefficients'] = coeffs.tolist()
+        context['polynomial'] = formatted_polynomial
+        plt.figure(figsize=(8, 6))
+        plt.scatter(x, y, color='red', label='Data Points')
+        xs = np.linspace(min(x), max(x), 500)
+        ys = np.polyval(coeffs[::-1], xs)
+        plt.plot(xs, ys, label=f'Interpolating polynomial: {formatted_polynomial}')
+        plt.title('Graph of the Vandermonde Interpolation')
+        plt.xlabel('X')
+        plt.ylabel('Y')
+        plt.legend()
+        plt.grid(True)
+        plt.savefig('static/img/vandermonde_graph.png')
+        context['graph'] = 'img/vandermonde_graph.png'
+    return render(request, 'oneVariable/vandermonde.html', context)

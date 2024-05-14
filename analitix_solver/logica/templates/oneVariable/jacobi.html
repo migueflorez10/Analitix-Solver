@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jacobi Method - AnalitixSolver</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jacobi.css' %}">
+</head>
+
+<body>
+    <header>
+        <div class="header-main">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'img/logo-main.webp' %}" alt="logo">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'methods' %}">Methods</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="method-playground">
+            <h1>Jacobi Method</h1>
+            <form id="jacobiForm" method="post">
+                {% csrf_token %}
+                <div class="parameters">
+                    <label>Matrix A (size up to 6x6)</label>
+                    <select id="matrix-size" name="matrix-size" onchange="updateMatrixInputs()">
+                        <option value="2">2x2</option>
+                        <option value="3">3x3</option>
+                        <option value="4">4x4</option>
+                        <option value="5">5x5</option>
+                        <option value="6">6x6</option>
+                    </select>
+                    <table id="matrix-inputs">
+                        <!-- JavaScript will populate this table with input fields -->
+                    </table>
+
+
+                    <label>Vector b (corresponding to the matrix size)</label>
+                    <div id="vector-inputs">
+                        <!-- Inputs for vector b will be dynamically created based on matrix size -->
+                    </div>
+
+                    <label for="initial_guess">Initial Guess</label>
+                    <input type="text" id="initial_guess" name="initial_guess" value="[0, 0, 0, 0, 0, 0]" required>
+
+                    <label for="tolerance">Tolerance</label>
+                    <input type="number" id="tolerance" name="tolerance" step="any" value="1e-7" required>
+
+                    <label for="max_iterations">Max Iterations</label>
+                    <input type="number" id="max_iterations" name="max_iterations" max="100" value="100" required>
+
+                    <button type="submit">Run</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="results-section">
+            {% if solution %}
+            <h4>The approximation of the solution vector is:</h4>
+            <p><b>{{ solution }}</b></p>
+            <p>Number of iterations: {{ iterations }}</p>
+            <p>Spectral Radius: {{ spectral_radius }}</p>
+            {% if spectral_radius < 1 %} <p>The method has converged.</p>
+                {% else %}
+                <p>The method may not have converged, reached maximum iterations.</p>
+                {% endif %}
+                <div id="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                {% for header in columns %}
+                                <th>{{ header }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in iter_details %}
+                            <tr>
+                                <td>{{ row.iteration }}</td>
+                                <td>{{ row.x_values }}</td>
+                                <td>{{ row.error }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <h4>No solution was found or there was an error processing your request</h4>
+                <p>{{ error }}</p>
+                {% endif %}
+        </section>
+
+
+        <section class="help-section">
+            <h2>Help</h2>
+            <p>Ensure that initial guesses are provided and the matrix A is diagonally dominant for better results.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 AnalitixSolver. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function updateMatrixInputs() {
+            var size = document.getElementById('matrix-size').value;
+            var matrixTable = document.getElementById('matrix-inputs');
+            var vectorInputs = document.getElementById('vector-inputs');
+            matrixTable.innerHTML = ''; // Clear existing table contents
+            vectorInputs.innerHTML = ''; // Clear existing vector inputs
+
+            // Create matrix inputs
+            for (var i = 0; i < size; i++) {
+                var row = matrixTable.insertRow(i);
+                for (var j = 0; j < size; j++) {
+                    var cell = row.insertCell(j);
+                    var input = document.createElement('input');
+                    input.type = 'number';
+                    input.name = 'matrixA' + i + j;
+                    input.step = "any";
+                    input.required = true;
+                    cell.appendChild(input);
+                }
+            }
+
+            // Create vector b inputs
+            for (var i = 0; i < size; i++) {
+                var input = document.createElement('input');
+                input.type = 'number';
+                input.name = 'vectorB' + i;
+                input.step = "any";
+                input.required = true;
+                vectorInputs.appendChild(input);
+            }
+        }
+        window.onload = updateMatrixInputs; // Populate on load
+    </script>
+
+</body>
+
+</html>

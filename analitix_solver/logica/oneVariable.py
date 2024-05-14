@@ -422,3 +422,83 @@ def sor_solver(A, b, omega, initial_guess, tolerance, max_iterations):
             break
         x = x_new
     return np.round(x, 4), iteration + 1, iter_details, np.round(spectral_radius, 6)
+'''
+
+'''
+def jacobi_solver(A, b, initial_guess, tolerance, max_iterations):
+    x = np.array(initial_guess)
+    n = len(b)
+    iter_details = []
+    x_new = np.copy(x)
+    D = np.diag(np.diag(A))
+    R = A - D
+    D_inv = np.linalg.inv(D)
+    T = -D_inv.dot(R)
+    spectral_radius = max(abs(np.linalg.eigvals(T)))
+    for iteration in range(max_iterations):
+        x_old = np.copy(x)
+        x_new = np.linalg.inv(D).dot(b - np.dot(R, x_old))
+        error = np.linalg.norm(x_new - x_old, np.inf)
+        formatted_error = f"{error:^15.7E}"
+        iter_details.append({'iteration': iteration, 'x_values': np.round(x_new, 6).tolist(), 'error': formatted_error})
+        if error < tolerance:
+            break
+        x = x_new
+    return np.round(x, 4), iteration + 1, iter_details, np.round(spectral_radius, 6)
+'''
+
+'''
+
+def gauss_seidel_solver(A, b, initial_guess, tolerance, max_iterations):
+    x = np.array(initial_guess)
+    n = len(b)
+    iter_details = []
+    x_new = np.copy(x)
+    D = np.diag(np.diag(A))
+    L = np.tril(A, -1)
+    U = np.triu(A, 1)
+    T = np.linalg.inv(D + L).dot(-U)
+    spectral_radius = max(abs(np.linalg.eigvals(T)))
+    for iteration in range(max_iterations):
+        x_old = np.copy(x)
+        for i in range(n):
+            s1 = np.dot(A[i, :i], x_new[:i])
+            s2 = np.dot(A[i, i+1:], x_old[i+1:])
+            x_new[i] = (b[i] - s1 - s2) / A[i, i]
+        error = np.linalg.norm(x_new - x_old, ord=np.inf)
+        formatted_error = f"{error:^15.7E}"
+        iter_details.append({'iteration': iteration, 'x_values': np.round(x_new, 6).tolist(), 'error': formatted_error})
+        if error < tolerance:
+            break
+        x = x_new
+    return np.round(x, 4), iteration + 1, iter_details, np.round(spectral_radius, 6)
+"""
+
+"""
+def vandermonde_interpolation(x_values, y_values):
+    x = np.array(x_values)
+    y = np.array(y_values)
+    V = np.vander(x, increasing=False)
+    coeffs = np.linalg.solve(V, y)
+    x_sym = sympy.symbols('x')
+    polynomial = sum(sympy.N(coeff, 6) * x_sym**i for i, coeff in enumerate(coeffs[::-1]))
+    polynomial_str = sympy.sstr(polynomial, full_prec=False)
+    terms = polynomial_str.replace('**', '^').split(' + ')
+    formatted_terms = []
+    for term in terms:
+        if 'x' in term:
+            parts = term.split('*')
+            if len(parts) == 2:
+                coeff, power = parts
+                if power == 'x^1':
+                    power = 'x'
+                formatted_term = f"{sympy.N(coeff, 6)}*{power}"
+            else:
+                formatted_term = term
+        else:
+            formatted_term = f"{sympy.N(term, 6)}"
+        formatted_terms.append(formatted_term)
+
+    formatted_polynomial = ' + '.join(formatted_terms).replace('+ -', '- ')
+
+    return V, np.round(coeffs, 6), polynomial, formatted_polynomial
