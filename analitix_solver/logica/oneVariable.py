@@ -3,7 +3,7 @@ from sympy import Symbol, sympify, Abs, diff
 from sympy.abc import x
 from sympy import symbols, sympify, N
 import numpy as np
-
+from . import convertTable 
 
 '''
 This code implements the bisection method to find a root of a function f(x) on a given interval [a,b]. 
@@ -58,6 +58,10 @@ def bisection(fx, Tol, Niter, a, b):
                             '{:^15.7f}'.format(b), '{:^15.7E}'.format(Fxm), '{:^15.7E}'.format(error)]) 
 
             i += 1
+        
+        
+            
+            
     except BaseException as e:
         if str(e) == "can't convert complex to float":
             output["errors"].append(
@@ -69,6 +73,7 @@ def bisection(fx, Tol, Niter, a, b):
 
     output["results"] = datos
     output["root"] = xm
+    convertTable.tableToText(output["columns"], output["results"], "bisection")
     return output
 
 '''
@@ -129,6 +134,7 @@ def fixed_point(X0, Tol, Niter, fx, gx):
 
     output["results"] = datos
     output["root"] = xA
+    convertTable.tableToText(output["columns"], output["results"], "fixed_point")
     return output
 
 """
@@ -210,6 +216,7 @@ def false_rule(a, b, Niter, Tol, fx):
 
     output["results"] = datos
     output["root"] = xm
+    convertTable.tableToText(output["columns"], output["results"], "false_position")
     return output
 
 '''
@@ -265,6 +272,7 @@ def newton(x0, Tol, Niter, fx, df):
 
     output["results"] = datos
     output["root"] = xi
+    convertTable.tableToText(output["columns"], output["results"], "newton")
     return output
 
 '''
@@ -325,6 +333,7 @@ def secant(fx, tol, Niter, x0, x1):
 
     output["results"] = results
     output["root"] = y
+    convertTable.tableToText(output["columns"], output["results"], "secant")
     return output
 
 '''
@@ -393,6 +402,7 @@ def multiple_roots(funct, first_derivative, second_derivative, x0, tol, max_coun
     else:
         output['conclusion'] = "The method exploded."
 
+    convertTable.tableToText(output["columns"], output["results"], "multiple_roots")
     return output
     
 '''
