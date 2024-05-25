@@ -5,9 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vandermonde - AnalitixSolver</title>
+    <title>Newton Interpolation - AnalitixSolver</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/vandermonde.css' %}">
+    <link rel="stylesheet" href="{% static 'css/newton_interpolation.css' %}">
 </head>
 
 <body>
@@ -27,11 +27,9 @@
     </header>
 
     <main>
-        <!-- Method playground section -->
         <section class="method-playground">
-            <h1>Vandermonde Method</h1>
-            <!-- Form for input parameters -->
-            <form id="vandermondeForm" method="post">
+            <h1>Newton Interpolation Method</h1>
+            <form id="newtonInterpolationForm" method="post">
                 {% csrf_token %}
                 <div class="parameters">
                     <label for="x_values">X values (comma-separated):</label>
@@ -43,49 +41,55 @@
             </form>
         </section>
 
-        <!-- Results section -->
         <section class="results-section">
-            {% if graph %}
-            <div id="graph-container">
-                <img style="width:90%;" src="{% static graph %}">
-            </div>
-            {% endif %}
-
             {% if error %}
             <p><b>{{ error }}</b></p>
             {% else %}
-            {% if coefficients %}
-            <p>Polynomial coefficients: <b>{{ coefficients }}</b></p>
+            {% if graph %}
+            <div id="graph-container" style="margin-bottom: 10px;">
+                <img style="width:90%;" src="{% static graph %}">
+            </div>
             {% endif %}
-
-            {% if polynomial %}
-            <p>Vandermonde polynomial:
-            <p><b>{{ polynomial }}</b></p>
-            {% endif %}
+            <b>Polynomial coefficients:</b>
+            <p>[{% for coeff in coefficients %}{{ coeff }}{% if not forloop.last %}, {% endif %}{% endfor %}]</p>
+        
+            <b>Newton's polynomial:</b>
+            <p>{{ polynomial }}</p>
+        
             <br>
-            {% if matrix %}
-            <h2>Vandermonde matrix:</h2>
-            <table class="table">
-                <tbody>
-                    {% for row in matrix %}
+            {% if table_data %}
+            <h2>Newton's Divided Difference Table</h2>
+            <div class="table-container">
+                <table>
                     <tr>
-                        {% for cell in row %}
-                        <td>{{ cell }}</td>
+                        <th>n</th>
+                        <th>x_i</th>
+                        <th>y = f[x_i]</th>
+                        {% for i in range %}
+                        <th>{{ i }}</th>
+                        {% endfor %}
+                    </tr>
+                    {% for row in table_data %}
+                    <tr>
+                        <td>{{ row.index }}</td>
+                        <td>{{ row.x }}</td>
+                        <td>{{ row.y|floatformat:"6" }}</td>
+                        {% for val in row.diffs %}
+                        <td>{{ val|floatformat:"6" }}</td>
                         {% endfor %}
                     </tr>
                     {% endfor %}
-                </tbody>
-            </table>
+                </table>
+            </div>
             {% endif %}
             {% endif %}
         </section>
-
-
-        <!-- Help section -->
+        
         <section class="help-section">
             <h2>Help</h2>
             <p>Enter the x and y values as comma-separated numbers. Each x corresponds to a y, forming coordinate pairs
                 used for interpolation.</p>
+            <p>Make sure that x values are unique and that you have the same number of x and y values.</p>
         </section>
     </main>
 </body>

@@ -369,24 +369,112 @@ def gauss_method(request):
 def vandermonde_method(request):
     context = {}
     if request.method == 'POST':
-        x_values = request.POST.get('x_values', '')
-        y_values = request.POST.get('y_values', '')
-        x = list(map(float, x_values.split(',')))
-        y = list(map(float, y_values.split(',')))
-        V, coeffs, polynomial, formatted_polynomial = vandermonde_interpolation(x, y)
-        context['matrix'] = V.tolist()
-        context['coefficients'] = coeffs.tolist()
-        context['polynomial'] = formatted_polynomial
-        plt.figure(figsize=(8, 6))
-        plt.scatter(x, y, color='red', label='Data Points')
-        xs = np.linspace(min(x), max(x), 500)
-        ys = np.polyval(coeffs[::-1], xs)
-        plt.plot(xs, ys, label=f'Interpolating polynomial: {formatted_polynomial}')
-        plt.title('Graph of the Vandermonde Interpolation')
-        plt.xlabel('X')
-        plt.ylabel('Y')
-        plt.legend()
-        plt.grid(True)
-        plt.savefig('static/img/vandermonde_graph.png')
-        context['graph'] = 'img/vandermonde_graph.png'
+        try:
+            x_values = request.POST.get('x_values', '')
+            y_values = request.POST.get('y_values', '')
+            x = list(map(float, x_values.split(',')))
+            y = list(map(float, y_values.split(',')))
+            V, coeffs, polynomial, formatted_polynomial = vandermonde_interpolation(x, y)
+            context['matrix'] = V.tolist()
+            context['coefficients'] = coeffs.tolist()
+            context['polynomial'] = formatted_polynomial
+            plt.figure(figsize=(8, 6))
+            plt.scatter(x, y, color='red', label='Data Points')
+            xs = np.linspace(min(x), max(x), 500)
+            ys = np.polyval(coeffs[::-1], xs)
+            plt.plot(xs, ys, label=f'Interpolating polynomial: {formatted_polynomial}')
+            plt.title('Graph of the Vandermonde Interpolation')
+            plt.xlabel('X')
+            plt.ylabel('Y')
+            plt.legend()
+            plt.grid(True)
+            plt.savefig('static/img/graph.png')
+            context['graph'] = 'img/graph.png'
+        except Exception as e:
+            context['error'] = str(e)
     return render(request, 'oneVariable/vandermonde.html', context)
+
+"""
+
+"""
+def newton_interpolation_method(request):
+    context = {}
+    if request.method == 'POST':
+        x_values = request.POST.get('x_values', '').strip()
+        y_values = request.POST.get('y_values', '').strip()
+        try:
+            x = list(map(float, x_values.split(',')))
+            y = list(map(float, y_values.split(',')))
+            if len(x) != len(y):
+                raise ValueError("The number of X values must match the number of Y values.")
+            if len(set(x)) != len(x):
+                raise ValueError("X values must be distinct.")
+            if len(set(y)) != len(y):
+                raise ValueError("Y values must be distinct.")
+            polynomial, diff_table, coefficients = newton_interpolation(x, y)
+            table_data = []
+            for i in range(len(x)):
+                row = {'index': i, 'x': x[i], 'y': diff_table[i, 0], 'diffs': diff_table[i, 1:].tolist()}
+                table_data.append(row)
+            x_plot = np.linspace(min(x) - 1, max(x) + 1, 400)
+            y_plot = [polynomial.subs('x', xi).evalf() for xi in x_plot]
+            plt.figure(figsize=(8, 6))
+            plt.plot(x_plot, y_plot, label='Newton Polynomial', color='blue')
+            plt.scatter(x, y, color='red', label='Data Points')
+            plt.title('Newton Interpolation Polynomial')
+            plt.xlabel('X')
+            plt.ylabel('Y')
+            plt.legend()
+            plt.grid(True)
+            plt.savefig('static/img/graph.png')
+            plt.close()
+            context['polynomial'] = str(polynomial)
+            context['coefficients'] = coefficients
+            context['graph'] = 'img/graph.png'
+            context['table_data'] = table_data
+            context['range'] = range(1, len(x))
+        except ValueError as e:
+            context['error'] = str(e)
+        except Exception as e:
+            context['error'] = "An unexpected error occurred: {}".format(e)
+    return render(request, 'oneVariable/newton_interpolation.html', context)
+"""
+
+"""
+def lagrange_interpolation_method(request):
+    context = {}
+    if request.method == 'POST':
+        x_values = request.POST.get('x_values', '').strip()
+        y_values = request.POST.get('y_values', '').strip()
+        try:
+            x = list(map(float, x_values.split(',')))
+            y = list(map(float, y_values.split(',')))
+            if len(x) != len(y):
+                raise ValueError("The number of x values must match the number of y values.")
+            
+            polynomial, Li_expr, polynomial_expr = lagrange_interpolation(x, y)
+            
+            x_plot = np.linspace(min(x) - 1, max(x) + 1, 400)
+            y_plot = [polynomial.subs('x', xi).evalf() for xi in x_plot]
+            plt.figure(figsize=(8, 6))
+            plt.plot(x_plot, y_plot, label='Lagrange Polynomial', color='blue')
+            plt.scatter(x, y, color='red', label='Data Points')
+            plt.title('Lagrange Interpolation Polynomial')
+            plt.xlabel('X')
+            plt.ylabel('Y')
+            plt.legend()
+            plt.grid(True)
+            plt.savefig('static/img/graph.png')
+            plt.close()
+            
+            context['polynomial'] = str(polynomial)
+            context['Li_expr'] = Li_expr
+            context['polynomial_expr'] = polynomial_expr
+            context['graph'] = 'img/graph.png'
+            
+        except ValueError as e:
+            context['error'] = str(e)
+        except Exception as e:
+            context['error'] = "An unexpected error occurred: {}".format(e)
+
+    return render(request, 'oneVariable/lagrange.html', context)

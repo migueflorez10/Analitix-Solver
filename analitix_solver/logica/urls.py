@@ -17,6 +17,8 @@ urlpatterns = [
     path('sor/', views.sor_method, name="sor_method"),
     path('jacobi/', views.jacobi_method, name="jacobi_method"),
     path('vandermonde/', views.vandermonde_method, name="vandermonde_method"),
+    path('newton_interpolation/', views.newton_interpolation_method, name="newton_interpolation_method"),
+    path('lagrange/', views.lagrange_interpolation_method, name="lagrange_interpolation_method"),
 
 
 ]

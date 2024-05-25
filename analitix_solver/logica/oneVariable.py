@@ -498,30 +498,88 @@ def gauss_seidel_solver(A, b, initial_guess, tolerance, max_iterations):
 """
 
 """
+
 def vandermonde_interpolation(x_values, y_values):
-    x = np.array(x_values)
-    y = np.array(y_values)
-    V = np.vander(x, increasing=False)
-    coeffs = np.linalg.solve(V, y)
-    x_sym = sympy.symbols('x')
-    polynomial = sum(sympy.N(coeff, 6) * x_sym**i for i, coeff in enumerate(coeffs[::-1]))
-    polynomial_str = sympy.sstr(polynomial, full_prec=False)
-    terms = polynomial_str.replace('**', '^').split(' + ')
-    formatted_terms = []
-    for term in terms:
-        if 'x' in term:
-            parts = term.split('*')
-            if len(parts) == 2:
-                coeff, power = parts
-                if power == 'x^1':
-                    power = 'x'
-                formatted_term = f"{sympy.N(coeff, 6)}*{power}"
+    try:
+        x = np.array(x_values)
+        y = np.array(y_values)
+        if len(x) != len(y):
+            raise ValueError("The number of x values must match the number of y values.")
+        if len(set(x)) != len(x):
+            raise ValueError("X values must be distinct.")
+        if len(set(y)) != len(y):
+            raise ValueError("Y values must be distinct.")
+        V = np.vander(x, increasing=False)
+        coeffs = np.linalg.solve(V, y)
+        x_sym = sympy.symbols('x')
+        polynomial = sum(sympy.N(coeff, 6) * x_sym**i for i, coeff in enumerate(coeffs[::-1]))
+        polynomial_str = sympy.sstr(polynomial, full_prec=False)
+        terms = polynomial_str.replace('**', '^').split(' + ')
+        formatted_terms = []
+        for term in terms:
+            if 'x' in term:
+                parts = term.split('*')
+                if len(parts) == 2:
+                    coeff, power = parts
+                    if power == 'x^1':
+                        power = 'x'
+                    formatted_term = f"{sympy.N(coeff, 6)}*{power}"
+                else:
+                    formatted_term = term
             else:
-                formatted_term = term
-        else:
-            formatted_term = f"{sympy.N(term, 6)}"
-        formatted_terms.append(formatted_term)
+                formatted_term = f"{sympy.N(term, 6)}"
+            formatted_terms.append(formatted_term)
+        formatted_polynomial = ' + '.join(formatted_terms).replace('+ -', '- ')
+        return V, np.round(coeffs, 6), polynomial, formatted_polynomial
+    except Exception as e:
+        raise e
+    
+"""
 
-    formatted_polynomial = ' + '.join(formatted_terms).replace('+ -', '- ')
+"""
+def newton_interpolation(x_values, y_values):
+    n = len(x_values)
+    x = sympy.symbols('x')
+    diff_table = np.zeros((n, n), dtype=float)
+    diff_table[:, 0] = y_values
+    for j in range(1, n):
+        for i in range(n - j):
+            diff_table[i][j] = (diff_table[i + 1][j - 1] - diff_table[i][j - 1]) / (x_values[i + j] - x_values[i])
+    coefficients = diff_table[0, :n]
+    polynomial = coefficients[0]
+    term = sympy.S(1)
+    for i in range(1, n):
+        term *= (x - x_values[i-1])
+        polynomial += coefficients[i] * term
+    polynomial = sympy.simplify(polynomial)
+    return polynomial, diff_table, np.round(coefficients.tolist(), 6)
 
-    return V, np.round(coeffs, 6), polynomial, formatted_polynomial
+"""
+
+"""
+def lagrange_interpolation(x_values, y_values):
+    x = sympy.symbols('x')
+    n = len(x_values)
+    L = []
+    Li_expr = []
+    
+    for i in range(n):
+        li = 1
+        li_expr = []
+        for j in range(n):
+            if i != j:
+                li *= (x - x_values[j]) / (x_values[i] - x_values[j])
+                li_expr.append(f"({x} - {x_values[j]}) / ({x_values[i]} - {x_values[j]})")
+        L.append(li)
+        Li_expr.append(" * ".join(li_expr))
+    
+    polynomial = sum(y_values[i] * L[i] for i in range(n))
+    polynomial = sympy.simplify(polynomial)
+    
+    polynomial_terms = [
+        f"({y_values[i]} * ({' * '.join([f'(x - {x_values[j]}) / ({x_values[i]} - {x_values[j]})' for j in range(n) if j != i])}))"
+        for i in range(n)
+    ]
+    polynomial_expr = " + ".join(polynomial_terms)
+    
+    return polynomial, Li_expr, polynomial_expr
