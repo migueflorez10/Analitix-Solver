@@ -18,8 +18,8 @@
             <nav>
                 <ul>
                     <li><a href="{% url 'methods' %}">Methods</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Help</a></li>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'help' %}">Help</a></li>
                 </ul>
             </nav>
         </div>
@@ -85,6 +85,16 @@
                 
             </div>
             </div>
+        </section>
+        <!-- Help section -->
+        <section class="help-section">
+            <h2>Help</h2>
+            <p>The functions must be continuous and differentiable.</p>
+            <p>Be sure that the function have a root.</p>
+            <p>TThe initial value is important for the method.</p>
+            <p>Tolerance must have a positive value.</p>
+            <p>The iteration number must be positive.</p>
+            <!-- Additional help information here -->
         </section>
     </main>
 
