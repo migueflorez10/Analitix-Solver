@@ -33,9 +33,9 @@
                 {% csrf_token %}
                 <div class="parameters">
                     <label for="x_values">X values (comma-separated):</label>
-                    <input type="text" id="x_values" name="x_values" required>
+                    <input type="text" id="x_values" name="x_values" value="-1,0,3,4" required>
                     <label for="y_values">Y values (comma-separated):</label>
-                    <input type="text" id="y_values" name="y_values" required>
+                    <input type="text" id="y_values" name="y_values" value="15.5,3,8,1" required>
                     <button type="submit">Run</button>
                 </div>
             </form>

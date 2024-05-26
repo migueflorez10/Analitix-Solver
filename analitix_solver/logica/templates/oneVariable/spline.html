@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spline - AnalitixSolver</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/spline.css' %}">
+</head>
+
+<body>
+    <header class="nav-bg">
+        <div class="header-main">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'img/logo-main.webp' %}" alt="logo">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'methods' %}">Methods</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="method-playground">
+            <h1>Spline Method</h1>
+            <form id="splineForm" method="post">
+                {% csrf_token %}
+                <div class="parameters">
+                    <label for="x_values">X values (comma-separated):</label>
+                    <input type="text" id="x_values" name="x_values" value="-2,-1,2,3" required>
+                    <label for="y_values">Y values (comma-separated):</label>
+                    <input type="text" id="y_values" name="y_values" value="12.1353,6.3678,-4.6109,2.08553" required>
+                    <label>Degree:</label>
+                    <select id="degree" name="degree">
+                        <option value="1">Linear</option>
+                        <option value="2">Square</option>
+                        <option value="3">Cubic</option>
+                    </select>
+                    <button type="submit">Run</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="results-section">
+            {% if coefficients %}
+            <div>
+                <div>
+                    <img style="width:90%;" src="{% static graph %}">
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>i</th>
+                            <th>Coeff1</th>
+                            <th>Coeff2</th>
+                            {% if degree > 1 %}
+                            <th>Coeff3</th>
+                            {% endif %}
+                            {% if degree > 2 %}
+                            <th>Coeff4</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for coef in coefficients %}
+                        <tr>
+                            <td>{{ coef.0 }}</td>
+                            <td>{{ coef.1 }}</td>
+                            <td>{{ coef.2 }}</td>
+                            {% if degree > 1 %}
+                            <td>{{ coef.3 }}</td>
+                            {% endif %}
+                            {% if degree > 2 %}
+                            <td>{{ coef.4 }}</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>i</th>
+                            <th>Tracers</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i, poly in polynomials %}
+                        <tr>
+                            <td>{{ i }}</td>
+                            <td>{{ poly }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="help-section">
+            <h2>Help</h2>
+            <p>X vector or Y vector can't contain a repeat value.</p>
+        </section>
+    </main>
+</body>
+
+</html>

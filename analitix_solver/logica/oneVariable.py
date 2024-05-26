@@ -556,30 +556,147 @@ def newton_interpolation(x_values, y_values):
 
 """
 
+
 """
 def lagrange_interpolation(x_values, y_values):
     x = sympy.symbols('x')
     n = len(x_values)
     L = []
     Li_expr = []
-    
     for i in range(n):
         li = 1
-        li_expr = []
+        numerators = []
+        denominators = []
         for j in range(n):
             if i != j:
                 li *= (x - x_values[j]) / (x_values[i] - x_values[j])
-                li_expr.append(f"({x} - {x_values[j]}) / ({x_values[i]} - {x_values[j]})")
+                num = f"(x - {x_values[j]:g})"
+                denom = f"({x_values[i]:g} - {x_values[j]:g})"
+                numerators.append(num)
+                denominators.append(denom)
+                numerator_expr = " * ".join(numerators)
+        denominator_expr = " * ".join(denominators)
+        full_expr = f"({numerator_expr}) / ({denominator_expr})"
         L.append(li)
-        Li_expr.append(" * ".join(li_expr))
-    
+        Li_expr.append((i, full_expr))
+
     polynomial = sum(y_values[i] * L[i] for i in range(n))
     polynomial = sympy.simplify(polynomial)
-    
-    polynomial_terms = [
-        f"({y_values[i]} * ({' * '.join([f'(x - {x_values[j]}) / ({x_values[i]} - {x_values[j]})' for j in range(n) if j != i])}))"
-        for i in range(n)
-    ]
-    polynomial_expr = " + ".join(polynomial_terms)
-    
-    return polynomial, Li_expr, polynomial_expr
+    return polynomial, Li_expr
+
+"""
+
+"""
+def spline_interpolation(x_values, y_values, degree):
+    x = np.array(x_values, dtype=float)
+    y = np.array(y_values, dtype=float)
+    n = len(x)
+    m = (degree + 1) * (n - 1)
+    A = np.zeros((m, m))
+    b = np.zeros(m)
+    coefficients = []
+    polynomials = []
+
+    if degree == 1:
+        c = 0
+        for i in range(n - 1):
+            A[i, c] = x[i]
+            A[i, c + 1] = 1
+            b[i] = y[i]
+            c += 2
+
+        c = 0
+        for i in range(1, n):
+            A[n - 1 + i - 1, c] = x[i]
+            A[n - 1 + i - 1, c + 1] = 1
+            b[n - 1 + i - 1] = y[i]
+            c += 2
+
+    elif degree == 2:
+        c = 0
+        for i in range(n - 1):
+            A[i, c] = x[i]**2
+            A[i, c + 1] = x[i]
+            A[i, c + 2] = 1
+            b[i] = y[i]
+            c += 3
+
+        c = 0
+        for i in range(1, n):
+            A[n - 1 + i - 1, c] = x[i]**2
+            A[n - 1 + i - 1, c + 1] = x[i]
+            A[n - 1 + i - 1, c + 2] = 1
+            b[n - 1 + i - 1] = y[i]
+            c += 3
+
+        c = 0
+        for i in range(1, n - 1):
+            A[2 * (n - 1) + i - 1, c] = 2 * x[i]
+            A[2 * (n - 1) + i - 1, c + 1] = 1
+            A[2 * (n - 1) + i - 1, c + 3] = -2 * x[i]
+            A[2 * (n - 1) + i - 1, c + 4] = -1
+            b[2 * (n - 1) + i - 1] = 0
+            c += 3
+
+        A[-1, 0] = 2
+        b[-1] = 0
+
+    elif degree == 3:
+        c = 0
+        for i in range(n - 1):
+            A[i, c] = x[i]**3
+            A[i, c + 1] = x[i]**2
+            A[i, c + 2] = x[i]
+            A[i, c + 3] = 1
+            b[i] = y[i]
+            c += 4
+
+        c = 0
+        for i in range(1, n):
+            A[n - 1 + i - 1, c] = x[i]**3
+            A[n - 1 + i - 1, c + 1] = x[i]**2
+            A[n - 1 + i - 1, c + 2] = x[i]
+            A[n - 1 + i - 1, c + 3] = 1
+            b[n - 1 + i - 1] = y[i]
+            c += 4
+
+        c = 0
+        for i in range(1, n - 1):
+            A[2 * (n - 1) + 2 * (i - 1), c] = 3 * x[i]**2
+            A[2 * (n - 1) + 2 * (i - 1), c + 1] = 2 * x[i]
+            A[2 * (n - 1) + 2 * (i - 1), c + 2] = 1
+            A[2 * (n - 1) + 2 * (i - 1), c + 4] = -3 * x[i]**2
+            A[2 * (n - 1) + 2 * (i - 1), c + 5] = -2 * x[i]
+            A[2 * (n - 1) + 2 * (i - 1), c + 6] = -1
+            b[2 * (n - 1) + 2 * (i - 1)] = 0
+            c += 4
+
+        c = 0
+        for i in range(1, n - 1):
+            A[2 * (n - 1) + 2 * (i - 1) + 1, c] = 6 * x[i]
+            A[2 * (n - 1) + 2 * (i - 1) + 1, c + 1] = 2
+            A[2 * (n - 1) + 2 * (i - 1) + 1, c + 4] = -6 * x[i]
+            A[2 * (n - 1) + 2 * (i - 1) + 1, c + 5] = -2
+            b[2 * (n - 1) + 2 * (i - 1) + 1] = 0
+            c += 4
+
+        A[-2, 0] = 6 * x[0]
+        A[-2, 1] = 2
+        b[-2] = 0
+
+        A[-1, -4] = 6 * x[-1]
+        A[-1, -3] = 2
+        b[-1] = 0
+
+    coef = np.linalg.solve(A, b)
+    for i in range(n - 1):
+        if degree == 1:
+            coefficients.append((i, coef[2 * i], coef[2 * i + 1]))
+            polynomials.append([coef[2 * i], coef[2 * i + 1]])
+        elif degree == 2:
+            coefficients.append((i, coef[3 * i], coef[3 * i + 1], coef[3 * i + 2]))
+            polynomials.append([coef[3 * i], coef[3 * i + 1], coef[3 * i + 2]])
+        elif degree == 3:
+            coefficients.append((i, coef[4 * i], coef[4 * i + 1], coef[4 * i + 2], coef[4 * i + 3]))
+            polynomials.append([coef[4 * i], coef[4 * i + 1], coef[4 * i + 2], coef[4 * i + 3]])
+    return coefficients, polynomials

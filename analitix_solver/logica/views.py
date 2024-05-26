@@ -452,8 +452,7 @@ def lagrange_interpolation_method(request):
             if len(x) != len(y):
                 raise ValueError("The number of x values must match the number of y values.")
             
-            polynomial, Li_expr, polynomial_expr = lagrange_interpolation(x, y)
-            
+            polynomial, Li_expr = lagrange_interpolation(x, y)
             x_plot = np.linspace(min(x) - 1, max(x) + 1, 400)
             y_plot = [polynomial.subs('x', xi).evalf() for xi in x_plot]
             plt.figure(figsize=(8, 6))
@@ -469,7 +468,8 @@ def lagrange_interpolation_method(request):
             
             context['polynomial'] = str(polynomial)
             context['Li_expr'] = Li_expr
-            context['polynomial_expr'] = polynomial_expr
+            context['x_values'] = x
+            context['y_values'] = y
             context['graph'] = 'img/graph.png'
             
         except ValueError as e:
@@ -478,3 +478,50 @@ def lagrange_interpolation_method(request):
             context['error'] = "An unexpected error occurred: {}".format(e)
 
     return render(request, 'oneVariable/lagrange.html', context)
+
+"""
+
+"""
+
+def spline_method(request):
+    context = {}
+    if request.method == 'POST':
+        x_values = request.POST.get('x_values').split(',')
+        y_values = request.POST.get('y_values').split(',')
+        degree = int(request.POST.get('degree'))
+        
+        x_values = [float(i) for i in x_values]
+        y_values = [float(i) for i in y_values]
+
+        coefficients, polynomials = spline_interpolation(x_values, y_values, degree)
+        x_plot = np.linspace(min(x_values), max(x_values), 400)
+        y_plots = []
+
+        for poly in polynomials:
+            p = np.poly1d(poly)
+            y_plots.append(p(x_plot))
+
+        plt.figure(figsize=(10, 5))
+        for y_plot in y_plots:
+            plt.plot(x_plot, y_plot)
+        plt.scatter(x_values, y_values, color='red', zorder=5)
+        plt.title('Spline Interpolation')
+        plt.grid(True)
+        plt.legend()
+        plt.savefig('static/img/graph.png')
+        plt.close()
+
+        context['coefficients'] = coefficients
+        context['polynomials'] = [(i, format_polynomial(poly, degree)) for i, poly in enumerate(polynomials)]
+        context['graph'] = 'img/graph.png'
+        context['degree'] = degree
+
+    return render(request, 'oneVariable/spline.html', context)
+
+def format_polynomial(coefficients, degree):
+    if degree == 1:
+        return f"{coefficients[0]:.12f}x + {coefficients[1]:.12f}"
+    elif degree == 2:
+        return f"{coefficients[0]:.12f}x^2 + {coefficients[1]:.12f}x + {coefficients[2]:.12f}"
+    elif degree == 3:
+        return f"{coefficients[0]:.12f}x^3 + {coefficients[1]:.12f}x^2 + {coefficients[2]:.12f}x + {coefficients[3]:.12f}"
