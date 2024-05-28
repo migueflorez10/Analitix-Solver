@@ -56,7 +56,7 @@ def false_position_method(request):
         plt.ylabel('y')
         plt.title('Graph of the Function')
         plt.grid(True)
-        plt.savefig('static/img/graph.png')  
+        plt.savefig('static/img/false_position.png')  
     if data:
         return render(request, './oneVariable/false_position.html', {'data': data,'error_message': error_message})
     
@@ -101,7 +101,7 @@ def fixed_point_method(request):
         plt.ylabel('y')
         plt.title('Graph of the Functions')
         plt.grid(True)
-        plt.savefig('static/img/graph.png')
+        plt.savefig('static/img/fixed_point.png')
 
     if data:  
         return render(request, './oneVariable/fixed_point.html', {'data': data})
@@ -148,7 +148,7 @@ def newton_method(request):
         plt.ylabel('y')
         plt.title('Graph of the Functions')
         plt.grid(True)
-        plt.savefig('static/img/graph.png')
+        plt.savefig('static/img/newton_graph.png')
 
     if data: 
         return render(request, './oneVariable/newton.html', {'data': data})
@@ -186,7 +186,7 @@ def secant_method(request):
         plt.ylabel('y')
         plt.title('Graph of the Function')
         plt.grid(True)
-        plt.savefig('static/img/graph.png') 
+        plt.savefig('static/img/secant_method.png') 
 
     if data:
         return render(request, './oneVariable/secant.html', {'data': data})
@@ -238,7 +238,7 @@ def multiple_roots_method(request):
         plt.ylabel('y')
         plt.title('Graph of the Function')
         plt.grid(True)
-        plt.savefig('static/img/graph.png') 
+        plt.savefig('static/img/multiple_roots.png') 
 
     if data:
         return render(request, "./oneVariable/multiple_roots.html", {"data":data})
@@ -306,7 +306,7 @@ def bisection_method(request):
             plt.ylabel('y')
             plt.title('Graph of the Function')
             plt.grid(True)
-            plt.savefig('static/img/graph.png')  
+            plt.savefig('static/img/bisection_method.png')  
 
             if data:
                 return render(request, './oneVariable/bisection.html', {'data': data, 'error_message': error_message })
@@ -417,8 +417,8 @@ def vandermonde_method(request):
             plt.ylabel('Y')
             plt.legend()
             plt.grid(True)
-            plt.savefig('static/img/graph.png')
-            context['graph'] = 'img/graph.png'
+            plt.savefig('static/img/vandermonde.png')
+            context['graph'] = 'img/vandermonde.png'
         except Exception as e:
             context['error'] = str(e)
     return render(request, 'oneVariable/vandermonde.html', context)
@@ -455,11 +455,11 @@ def newton_interpolation_method(request):
             plt.ylabel('Y')
             plt.legend()
             plt.grid(True)
-            plt.savefig('static/img/graph.png')
+            plt.savefig('static/img/newton_interpolation.png')
             plt.close()
             context['polynomial'] = str(polynomial)
             context['coefficients'] = coefficients
-            context['graph'] = 'img/graph.png'
+            context['graph'] = 'img/newton_interpolation.png'
             context['table_data'] = table_data
             context['range'] = range(1, len(x))
         except ValueError as e:
@@ -495,14 +495,14 @@ def lagrange_interpolation_method(request):
             plt.ylabel('Y')
             plt.legend()
             plt.grid(True)
-            plt.savefig('static/img/graph.png')
+            plt.savefig('static/img/graph_lagrange.png')
             plt.close()
             
             context['polynomial'] = str(polynomial)
             context['Li_expr'] = Li_expr
             context['x_values'] = x
             context['y_values'] = y
-            context['graph'] = 'img/graph.png'
+            context['graph'] = 'img/graph_lagrange.png'
             
         except ValueError as e:
             context['error'] = str(e)
@@ -540,12 +540,12 @@ def spline_method(request):
         plt.title('Spline Interpolation')
         plt.grid(True)
         plt.legend()
-        plt.savefig('static/img/graph.png')
+        plt.savefig('static/img/spline_method.png')
         plt.close()
 
         context['coefficients'] = coefficients
         context['polynomials'] = [(i, format_polynomial(poly, degree)) for i, poly in enumerate(polynomials)]
-        context['graph'] = 'img/graph.png'
+        context['graph'] = 'img/spline_method.png'
         context['degree'] = degree
 
     return render(request, 'oneVariable/spline.html', context)
