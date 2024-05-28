@@ -449,6 +449,9 @@ def sor_solver(A, b, omega, initial_guess, tolerance, max_iterations):
 
 '''
 def jacobi_solver(A, b, initial_guess, tolerance, max_iterations):
+    output = {}
+    headers = ["iteration", "x_values", "error"]
+    details = []
     x = np.array(initial_guess)
     n = len(b)
     iter_details = []
@@ -464,9 +467,14 @@ def jacobi_solver(A, b, initial_guess, tolerance, max_iterations):
         error = np.linalg.norm(x_new - x_old, np.inf)
         formatted_error = f"{error:^15.7E}"
         iter_details.append({'iteration': iteration, 'x_values': np.round(x_new, 6).tolist(), 'error': formatted_error})
+        details.append([iteration, np.round(x_new, 6).tolist(), formatted_error])
+
         if error < tolerance:
             break
         x = x_new
+    output["results"] = details
+    convertTable.tableToText(headers , output["results"] , "jacobi_solver")
+
     return np.round(x, 4), iteration + 1, iter_details, np.round(spectral_radius, 6)
 '''
 
@@ -475,6 +483,9 @@ def jacobi_solver(A, b, initial_guess, tolerance, max_iterations):
 def gauss_seidel_solver(A, b, initial_guess, tolerance, max_iterations):
     x = np.array(initial_guess)
     n = len(b)
+    output = {}
+    headers = ["iteration", "x_values", "error"]
+    details = []
     iter_details = []
     x_new = np.copy(x)
     D = np.diag(np.diag(A))
@@ -491,9 +502,15 @@ def gauss_seidel_solver(A, b, initial_guess, tolerance, max_iterations):
         error = np.linalg.norm(x_new - x_old, ord=np.inf)
         formatted_error = f"{error:^15.7E}"
         iter_details.append({'iteration': iteration, 'x_values': np.round(x_new, 6).tolist(), 'error': formatted_error})
+        details.append([iteration, np.round(x_new, 6).tolist(), formatted_error])
+
         if error < tolerance:
             break
         x = x_new
+        
+    output["results"] = details
+    convertTable.tableToText(headers , output["results"] , "gauss_seidel_solver")
+    
     return np.round(x, 4), iteration + 1, iter_details, np.round(spectral_radius, 6)
 """
 
@@ -579,9 +596,8 @@ def lagrange_interpolation(x_values, y_values):
         full_expr = f"({numerator_expr}) / ({denominator_expr})"
         L.append(li)
         Li_expr.append((i, full_expr))
-
     polynomial = sum(y_values[i] * L[i] for i in range(n))
-    polynomial = sympy.simplify(polynomial)
+    #polynomial = sympy.simplify(polynomial)
     return polynomial, Li_expr
 
 """
@@ -590,6 +606,12 @@ def lagrange_interpolation(x_values, y_values):
 def spline_interpolation(x_values, y_values, degree):
     x = np.array(x_values, dtype=float)
     y = np.array(y_values, dtype=float)
+    if len(x) != len(y):
+        raise ValueError("The number of X values must match the number of Y values.")
+    if len(set(x)) != len(x):
+        raise ValueError("X values must be distinct.")
+    if len(set(y)) != len(y):
+        raise ValueError("Y values must be distinct.")
     n = len(x)
     m = (degree + 1) * (n - 1)
     A = np.zeros((m, m))

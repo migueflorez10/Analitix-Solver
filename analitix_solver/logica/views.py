@@ -450,8 +450,11 @@ def lagrange_interpolation_method(request):
             x = list(map(float, x_values.split(',')))
             y = list(map(float, y_values.split(',')))
             if len(x) != len(y):
-                raise ValueError("The number of x values must match the number of y values.")
-            
+                raise ValueError("The number of X values must match the number of Y values.")
+            if len(set(x)) != len(x):
+                raise ValueError("X values must be distinct.")
+            if len(set(y)) != len(y):
+                raise ValueError("Y values must be distinct.")
             polynomial, Li_expr = lagrange_interpolation(x, y)
             x_plot = np.linspace(min(x) - 1, max(x) + 1, 400)
             y_plot = [polynomial.subs('x', xi).evalf() for xi in x_plot]
