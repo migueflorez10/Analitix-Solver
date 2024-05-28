@@ -48,6 +48,9 @@
         </section>
 
         <section class="results-section">
+            {% if error %}
+            <p><b>{{ error }}</b></p>
+            {% else %}
             {% if coefficients %}
             <div>
                 <div>
@@ -100,6 +103,7 @@
                     </tbody>
                 </table>
             </div>
+            {% endif %}
             {% endif %}
         </section>
 

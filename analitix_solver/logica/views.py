@@ -517,37 +517,42 @@ def lagrange_interpolation_method(request):
 
 def spline_method(request):
     context = {}
-    if request.method == 'POST':
-        x_values = request.POST.get('x_values').split(',')
-        y_values = request.POST.get('y_values').split(',')
-        degree = int(request.POST.get('degree'))
+    try:
+        if request.method == 'POST':
+            x_values = request.POST.get('x_values').split(',')
+            y_values = request.POST.get('y_values').split(',')
+            degree = int(request.POST.get('degree'))
+            
+            x_values = [float(i) for i in x_values]
+            y_values = [float(i) for i in y_values]
+
+            coefficients, polynomials = spline_interpolation(x_values, y_values, degree)
+            x_plot = np.linspace(min(x_values), max(x_values), 400)
+            y_plots = []
+
+            for poly in polynomials:
+                p = np.poly1d(poly)
+                y_plots.append(p(x_plot))
+
+            plt.figure(figsize=(10, 5))
+            for y_plot in y_plots:
+                plt.plot(x_plot, y_plot)
+            plt.scatter(x_values, y_values, color='red', zorder=5)
+            plt.title('Spline Interpolation')
+            plt.grid(True)
+            plt.legend()
+            plt.savefig('static/img/spline_method.png')
+            plt.close()
+
+            context['coefficients'] = coefficients
+            context['polynomials'] = [(i, format_polynomial(poly, degree)) for i, poly in enumerate(polynomials)]
+            context['graph'] = 'img/spline_method.png'
+            context['degree'] = degree
         
-        x_values = [float(i) for i in x_values]
-        y_values = [float(i) for i in y_values]
-
-        coefficients, polynomials = spline_interpolation(x_values, y_values, degree)
-        x_plot = np.linspace(min(x_values), max(x_values), 400)
-        y_plots = []
-
-        for poly in polynomials:
-            p = np.poly1d(poly)
-            y_plots.append(p(x_plot))
-
-        plt.figure(figsize=(10, 5))
-        for y_plot in y_plots:
-            plt.plot(x_plot, y_plot)
-        plt.scatter(x_values, y_values, color='red', zorder=5)
-        plt.title('Spline Interpolation')
-        plt.grid(True)
-        plt.legend()
-        plt.savefig('static/img/spline_method.png')
-        plt.close()
-
-        context['coefficients'] = coefficients
-        context['polynomials'] = [(i, format_polynomial(poly, degree)) for i, poly in enumerate(polynomials)]
-        context['graph'] = 'img/spline_method.png'
-        context['degree'] = degree
-
+    except ValueError as e:
+        context['error'] = str(e)
+    except Exception as e:
+        context['error'] = "An unexpected error occurred: {}".format(e)
     return render(request, 'oneVariable/spline.html', context)
 
 def format_polynomial(coefficients, degree):
