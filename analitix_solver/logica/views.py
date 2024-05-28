@@ -19,6 +19,7 @@ def Methods(request):
 
 def false_position_method(request):
     data = ()
+    error_message = False
     if request.method == 'POST':
         fx = request.POST["function"]
 
@@ -34,7 +35,10 @@ def false_position_method(request):
         niter = request.POST["max_iterations"]
         Niter = int(niter)
 
-        data = false_rule(X0, Xi, Niter, Tol, fx)
+        if X0 > Xi:
+            error_message = "Error: a has to be less than b"
+        else:
+            data = false_rule(X0, Xi, Niter, Tol, fx)
         try:
             # Convierte la cadena de texto de la función en una función de Sympy
             function = sympify(fx)
@@ -54,9 +58,9 @@ def false_position_method(request):
         plt.grid(True)
         plt.savefig('static/img/graph.png')  
     if data:
-        return render(request, './oneVariable/false_position.html', {'data': data})
+        return render(request, './oneVariable/false_position.html', {'data': data,'error_message': error_message})
     
-    return render(request, "./oneVariable/false_position.html")
+    return render(request, "./oneVariable/false_position.html",{'error_message': error_message})
 
 def fixed_point_method(request):
     data = ()
@@ -246,6 +250,7 @@ def multiple_roots_method(request):
 '''
 def bisection_method(request):
     data = ()
+    error_message = False
     if request.method == 'POST':
         fx = request.POST["function"]
         tol = request.POST["tolerance"]
@@ -258,7 +263,10 @@ def bisection_method(request):
         b_value = request.POST["b_value"]
         b_value = float(b_value)
 
-        data = bisection(fx, Tol, Niter, a_value, b_value)
+        if a_value > b_value:
+            error_message = "Error: a has to be less than b"
+        else:
+            data = bisection(fx, Tol, Niter, a_value, b_value)
 
         try:
             # Convierte la cadena de texto de la función en una función de Sympy
@@ -271,18 +279,39 @@ def bisection_method(request):
         x = np.linspace(-10, 10, 1000)
         y = np.array([function.evalf(subs={'x': xi}) for xi in x])
 
-        plt.figure(figsize=(8, 6))
-        plt.plot(x, y)
-        plt.xlabel('x')
-        plt.ylabel('y')
-        plt.title('Graph of the Function')
-        plt.grid(True)
-        plt.savefig('static/img/graph.png')  
+        x_comprobante = np.linspace(a_value, b_value, 100)
+        y_comprobante = np.array([function.evalf(subs={'x': xi}) for xi in x_comprobante])
+        
+        postivo = False
+        negativo = False
+        aux = False
 
-    if data:
-        return render(request, './oneVariable/bisection.html', {'data': data})
+        for num in y_comprobante:
+            if float(num) > 0:
+                postivo = True
+            elif float(num) < 0:
+                negativo = True
 
-    return render(request, './oneVariable/bisection.html')
+            if postivo and negativo:
+                aux = True
+        
+        print(y_comprobante)
+        if not aux:
+            error_message = "Error: There was no found a root in the interval of the function"
+
+        if aux:
+            plt.figure(figsize=(8, 6))
+            plt.plot(x, y)
+            plt.xlabel('x')
+            plt.ylabel('y')
+            plt.title('Graph of the Function')
+            plt.grid(True)
+            plt.savefig('static/img/graph.png')  
+
+            if data:
+                return render(request, './oneVariable/bisection.html', {'data': data, 'error_message': error_message })
+
+    return render(request, './oneVariable/bisection.html', {'error_message': error_message})
 
 '''
 

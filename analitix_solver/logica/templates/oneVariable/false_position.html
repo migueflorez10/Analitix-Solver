@@ -57,9 +57,15 @@
             <div id="graph-container">
                 <img style="width:90%;" src="{% static 'img/graph.png' %}">
             </div>
-            {% endif %}
             <br>
             <h4>The approximation of the root found is: {{data.root}}</h4>
+            {% endif %}
+            {% if error_message %}
+            <div id="graph-container">
+                <h4>{{error_message}}</h4>
+            </div>
+            
+            {% endif %}
             <div id="table-container">
                 
                 <table class="table">

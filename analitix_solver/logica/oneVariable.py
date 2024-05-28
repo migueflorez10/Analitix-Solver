@@ -14,6 +14,7 @@ def bisection(fx, Tol, Niter, a, b):
         "iterations": Niter,
         "errors": list()
     }
+    
 
     # Configuraciones iniciales
     datos = list()
@@ -40,9 +41,8 @@ def bisection(fx, Tol, Niter, a, b):
         while (error > Tol) and (i < Niter): 
             # Se elecciona un intervalo inicial, donde el valor de la funcion cambie de signo en [a,b]
             if (Fa*Fxm < 0):
-                b = xm
+                b = xm 
             else:
-                # Cambia de signo en [m,b]
                 a = xm 
 
             xm0 = xm
@@ -57,10 +57,7 @@ def bisection(fx, Tol, Niter, a, b):
             datos.append([i, '{:^15.7f}'.format(a), '{:^15.7f}'.format(xm), 
                             '{:^15.7f}'.format(b), '{:^15.7E}'.format(Fxm), '{:^15.7E}'.format(error)]) 
 
-            i += 1
-        
-        
-            
+            i += 1  
             
     except BaseException as e:
         if str(e) == "can't convert complex to float":
@@ -182,7 +179,7 @@ def false_rule(a, b, Niter, Tol, fx):
             else:
 
                 if (Fa*Fx_3 < 0):
-                    b = xm
+                    b = xm 
                 else:
                     a = xm
 
